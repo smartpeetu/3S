@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "../lib/supabase";
 
 const initialFormData = {
   name: "",
@@ -76,26 +77,46 @@ function TeamMemberForm() {
     return newErrors;
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+const handleSubmit = async (event) => {
+  event.preventDefault();
 
-    const validationErrors = validateForm();
+  const validationErrors = validateForm();
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      setSuccessMessage("");
-      return;
-    }
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    setSuccessMessage("");
+    return;
+  }
 
-    console.log("Team Member Details:", formData);
-
-    setSuccessMessage(
-      "Team member has been registered successfully."
-    );
-
-    setErrors({});
-    setFormData(initialFormData);
+  const dbRecord = {
+    name: formData.name,
+    location: formData.location,
+    career_level: Number(formData.careerLevel),
+    primary_skill: formData.primarySkill,
+    secondary_skill: formData.secondarySkill,
+    email: formData.email,
+    phone_number: formData.phoneNumber,
   };
+
+  console.log("Saving team member:", dbRecord);
+
+  const { error } = await supabase
+    .from("team_members")
+    .insert([dbRecord]);
+
+  if (error) {
+    console.error("Supabase insert failed:", error);
+    setSuccessMessage("");
+    return;
+  }
+
+  setSuccessMessage(
+    "Team member has been registered successfully."
+  );
+
+  setErrors({});
+  setFormData(initialFormData);
+};
 
   const handleReset = () => {
     setFormData(initialFormData);
