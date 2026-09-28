@@ -1,0 +1,6 @@
+{
+  "name": "3S - Team Member Registration",
+  "description": "Professional team member registration and management portal",
+  "permissions": [],
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
