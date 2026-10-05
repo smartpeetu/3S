@@ -15,15 +15,43 @@ const initialFormData = {
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_PHOTO_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
+<<<<<<< HEAD
 function TeamMemberForm() {
   const [formData, setFormData] = useState(initialFormData);
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState("");
+=======
+function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = false }) {
+  const isEditMode = Boolean(initialData && initialData.id);
+
+  const [formData, setFormData] = useState(() => {
+    if (initialData) {
+      return {
+        name: initialData.name || "",
+        location: initialData.location || "",
+        careerLevel: initialData.career_level ? String(initialData.career_level) : "",
+        primarySkill: initialData.primary_skill || "",
+        secondarySkill: initialData.secondary_skill || "",
+        email: initialData.email || "",
+        phoneNumber: initialData.phone_number || "",
+        role: initialData.role || "",
+      };
+    }
+    return initialFormData;
+  });
+
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(initialData?.photo_url || "");
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [submitError, setSubmitError] = useState("");
   const fileInputRef = useRef(null);
+<<<<<<< HEAD
+=======
+  const isBlobUrlRef = useRef(false);
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -72,20 +100,38 @@ function TeamMemberForm() {
       photo: "",
     }));
 
+<<<<<<< HEAD
     if (photoPreview) {
+=======
+    if (photoPreview && isBlobUrlRef.current) {
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       URL.revokeObjectURL(photoPreview);
     }
 
     setPhotoFile(file);
+<<<<<<< HEAD
     setPhotoPreview(URL.createObjectURL(file));
   };
 
   const handleRemovePhoto = () => {
     if (photoPreview) {
+=======
+    const newBlob = URL.createObjectURL(file);
+    isBlobUrlRef.current = true;
+    setPhotoPreview(newBlob);
+  };
+
+  const handleRemovePhoto = () => {
+    if (photoPreview && isBlobUrlRef.current) {
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       URL.revokeObjectURL(photoPreview);
     }
     setPhotoFile(null);
     setPhotoPreview("");
+<<<<<<< HEAD
+=======
+    isBlobUrlRef.current = false;
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
     setErrors((prev) => ({
       ...prev,
       photo: "",
@@ -156,9 +202,15 @@ function TeamMemberForm() {
     let uploadedFilePath = null;
 
     try {
+<<<<<<< HEAD
       let photoUrl = null;
 
       // Upload photo to Supabase Storage if one was selected
+=======
+      let photoUrl = initialData?.photo_url || null;
+
+      // Upload photo to Supabase Storage if a new file was chosen
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       if (photoFile) {
         const fileExt = photoFile.name.split(".").pop().toLowerCase();
         const sanitizedBase = photoFile.name
@@ -195,6 +247,12 @@ function TeamMemberForm() {
           .getPublicUrl(filePath);
 
         photoUrl = publicUrlData?.publicUrl || null;
+<<<<<<< HEAD
+=======
+      } else if (!photoPreview) {
+        // User removed the photo
+        photoUrl = null;
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       }
 
       const dbRecord = {
@@ -209,6 +267,7 @@ function TeamMemberForm() {
         photo_url: photoUrl,
       };
 
+<<<<<<< HEAD
       console.log("Saving team member:", dbRecord);
 
       const { error } = await supabase
@@ -256,6 +315,101 @@ function TeamMemberForm() {
       console.error("Unexpected submission error:", error);
 
       // Roll back uploaded photo on unexpected error
+=======
+      if (isEditMode) {
+        const updatePayload = {
+          ...dbRecord,
+          updated_at: new Date().toISOString(),
+        };
+
+        const { data, error } = await supabase
+          .from("team_members")
+          .update(updatePayload)
+          .eq("id", initialData.id)
+          .select();
+
+        if (error) {
+          console.error("Supabase update failed:", error);
+          if (uploadedFilePath) {
+            try {
+              await supabase.storage
+                .from("team-member-photos")
+                .remove([uploadedFilePath]);
+            } catch (cleanupErr) {
+              console.warn("Storage cleanup failed:", cleanupErr);
+            }
+          }
+          setSubmitError(
+            error.message
+              ? `Database error: ${error.message}`
+              : "Unable to update the team member. Please try again."
+          );
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          if (uploadedFilePath) {
+            try {
+              await supabase.storage
+                .from("team-member-photos")
+                .remove([uploadedFilePath]);
+            } catch (cleanupErr) {
+              console.warn("Storage cleanup failed:", cleanupErr);
+            }
+          }
+          setSubmitError(
+            "Database permission error: Update was blocked by Supabase Row Level Security (RLS) policies. Please disable RLS or set an UPDATE policy for anonymous/public access in Supabase."
+          );
+          return;
+        }
+
+        setSuccessMessage("Team member has been updated successfully.");
+      } else {
+        const { error } = await supabase
+          .from("team_members")
+          .insert([dbRecord]);
+
+        if (error) {
+          console.error("Supabase insert failed:", error);
+
+          if (uploadedFilePath) {
+            try {
+              await supabase.storage
+                .from("team-member-photos")
+                .remove([uploadedFilePath]);
+            } catch (cleanupErr) {
+              console.warn("Storage cleanup failed:", cleanupErr);
+            }
+          }
+
+          setSubmitError(
+            error.message
+              ? `Database error: ${error.message}`
+              : "Unable to register the team member. Please try again."
+          );
+          return;
+        }
+
+        setSuccessMessage("Team member has been registered successfully.");
+
+        // Reset fields only on create
+        setFormData(initialFormData);
+        if (photoPreview && isBlobUrlRef.current) {
+          URL.revokeObjectURL(photoPreview);
+        }
+        setPhotoFile(null);
+        setPhotoPreview("");
+        isBlobUrlRef.current = false;
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+      }
+
+      setErrors({});
+    } catch (error) {
+      console.error("Unexpected submission error:", error);
+
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       if (uploadedFilePath) {
         try {
           await supabase.storage
@@ -269,7 +423,11 @@ function TeamMemberForm() {
       setSubmitError(
         error?.message
           ? `Unexpected error: ${error.message}`
+<<<<<<< HEAD
           : "Something went wrong while registering the team member."
+=======
+          : "Something went wrong while saving the team member."
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       );
     } finally {
       setIsSubmitting(false);
@@ -279,12 +437,42 @@ function TeamMemberForm() {
   const handleReset = () => {
     if (isSubmitting) return;
 
+<<<<<<< HEAD
     setFormData(initialFormData);
     if (photoPreview) {
       URL.revokeObjectURL(photoPreview);
     }
     setPhotoFile(null);
     setPhotoPreview("");
+=======
+    if (isEditMode && initialData) {
+      setFormData({
+        name: initialData.name || "",
+        location: initialData.location || "",
+        careerLevel: initialData.career_level ? String(initialData.career_level) : "",
+        primarySkill: initialData.primary_skill || "",
+        secondarySkill: initialData.secondary_skill || "",
+        email: initialData.email || "",
+        phoneNumber: initialData.phone_number || "",
+        role: initialData.role || "",
+      });
+      if (photoPreview && isBlobUrlRef.current) {
+        URL.revokeObjectURL(photoPreview);
+      }
+      setPhotoFile(null);
+      setPhotoPreview(initialData.photo_url || "");
+      isBlobUrlRef.current = false;
+    } else {
+      setFormData(initialFormData);
+      if (photoPreview && isBlobUrlRef.current) {
+        URL.revokeObjectURL(photoPreview);
+      }
+      setPhotoFile(null);
+      setPhotoPreview("");
+      isBlobUrlRef.current = false;
+    }
+
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -295,7 +483,11 @@ function TeamMemberForm() {
 
   useEffect(() => {
     return () => {
+<<<<<<< HEAD
       if (photoPreview) {
+=======
+      if (photoPreview && isBlobUrlRef.current) {
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
         URL.revokeObjectURL(photoPreview);
       }
     };
@@ -303,11 +495,21 @@ function TeamMemberForm() {
 
   const closeSuccessPopup = () => {
     setSuccessMessage("");
+<<<<<<< HEAD
+=======
+    if (onSuccess) {
+      onSuccess();
+    }
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
   };
 
   return (
     <>
+<<<<<<< HEAD
       <div className="min-h-screen bg-[#f5f3f7] px-4 py-8 sm:px-6 lg:px-8">
+=======
+      <div className={embedded ? "p-0" : "min-h-screen bg-[#f5f3f7] px-4 py-8 sm:px-6 lg:px-8"}>
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
         <div className="mx-auto max-w-5xl">
 
           {/* Header */}
@@ -318,12 +520,22 @@ function TeamMemberForm() {
               </p>
 
               <h1 className="mt-1 text-2xl font-semibold tracking-tight text-[#2b2b2b] sm:text-3xl">
+<<<<<<< HEAD
                 Team Member Registration
               </h1>
 
               <p className="mt-2 text-sm text-gray-600">
                 Register a team member by providing their basic
                 professional information.
+=======
+                {isEditMode ? "Edit Team Member" : "Team Member Registration"}
+              </h1>
+
+              <p className="mt-2 text-sm text-gray-600">
+                {isEditMode
+                  ? `Update personal and professional information for ${initialData?.name || "this team member"}.`
+                  : "Register a team member by providing their basic professional information."}
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
               </p>
             </div>
 
@@ -346,6 +558,7 @@ function TeamMemberForm() {
             <div className="p-6 sm:p-8">
 
               {/* Section heading */}
+<<<<<<< HEAD
               <div className="mb-7 border-b border-gray-200 pb-5">
                 <h2 className="text-lg font-semibold text-[#2b2b2b]">
                   Team Member Details
@@ -356,6 +569,33 @@ function TeamMemberForm() {
                   <span className="text-red-500">*</span>{" "}
                   are mandatory.
                 </p>
+=======
+              <div className="mb-7 flex items-center justify-between border-b border-gray-200 pb-5">
+                <div>
+                  <h2 className="text-lg font-semibold text-[#2b2b2b]">
+                    {isEditMode ? "Edit Details" : "Team Member Details"}
+                  </h2>
+
+                  <p className="mt-1 text-sm text-gray-500">
+                    Fields marked with{" "}
+                    <span className="text-red-500">*</span>{" "}
+                    are mandatory.
+                  </p>
+                </div>
+
+                {onCancel && (
+                  <button
+                    type="button"
+                    onClick={onCancel}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50 hover:text-gray-900"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back to Records
+                  </button>
+                )}
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
               </div>
 
               {/* Error Message */}
@@ -380,7 +620,11 @@ function TeamMemberForm() {
 
                   <div>
                     <p className="font-medium">
+<<<<<<< HEAD
                       Registration failed
+=======
+                      {isEditMode ? "Update failed" : "Registration failed"}
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
                     </p>
 
                     <p className="mt-0.5">
@@ -532,7 +776,11 @@ function TeamMemberForm() {
                   </div>
                 </div>
 
+<<<<<<< HEAD
                 {/* Profile Photo (at bottom of form) */}
+=======
+                {/* Profile Photo */}
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
                 <div className="mb-8">
                   <h3 className="mb-5 text-sm font-semibold uppercase tracking-wide text-[#7500c0]">
                     Profile Photo
@@ -652,6 +900,20 @@ function TeamMemberForm() {
                 {/* Actions */}
                 <div className="flex flex-col-reverse gap-3 border-t border-gray-200 pt-6 sm:flex-row sm:justify-end">
 
+<<<<<<< HEAD
+=======
+                  {onCancel && (
+                    <button
+                      type="button"
+                      onClick={onCancel}
+                      disabled={isSubmitting}
+                      className="rounded-md border border-gray-300 px-6 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#a100ff] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                  )}
+
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
                   <button
                     type="button"
                     onClick={handleReset}
@@ -669,11 +931,19 @@ function TeamMemberForm() {
                     {isSubmitting ? (
                       <>
                         <LoadingSpinner />
+<<<<<<< HEAD
                         <span>Registering...</span>
                       </>
                     ) : (
                       <>
                         <span>Register Team Member</span>
+=======
+                        <span>{isEditMode ? "Saving Changes..." : "Registering..."}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>{isEditMode ? "Save Changes" : "Register Team Member"}</span>
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
                         <svg
                           className="h-4 w-4"
                           fill="none"
@@ -696,9 +966,17 @@ function TeamMemberForm() {
           </div>
 
           {/* Footer */}
+<<<<<<< HEAD
           <p className="mt-5 text-center text-xs text-gray-500">
             3S Application · Team Member Registration
           </p>
+=======
+          {!embedded && (
+            <p className="mt-5 text-center text-xs text-gray-500">
+              3S Application · Team Member Registration
+            </p>
+          )}
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
         </div>
       </div>
 
@@ -706,6 +984,10 @@ function TeamMemberForm() {
       {successMessage && (
         <SuccessModal
           message={successMessage}
+<<<<<<< HEAD
+=======
+          title={isEditMode ? "Update Successful" : "Registration Successful"}
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
           onClose={closeSuccessPopup}
         />
       )}
@@ -747,7 +1029,11 @@ function LoadingSpinner() {
 /* Success Modal                                                              */
 /* -------------------------------------------------------------------------- */
 
+<<<<<<< HEAD
 function SuccessModal({ message, onClose }) {
+=======
+function SuccessModal({ message, title = "Registration Successful", onClose }) {
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
@@ -755,7 +1041,11 @@ function SuccessModal({ message, onClose }) {
       aria-modal="true"
       aria-labelledby="success-title"
     >
+<<<<<<< HEAD
       <div className="w-full max-w-md animate-[successIn_0.25s_ease-out] rounded-2xl bg-white p-8 text-center shadow-2xl">
+=======
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-2xl">
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
         {/* Success Icon */}
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
@@ -782,7 +1072,11 @@ function SuccessModal({ message, onClose }) {
           id="success-title"
           className="mt-5 text-xl font-semibold text-gray-900"
         >
+<<<<<<< HEAD
           Registration Successful
+=======
+          {title}
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
         </h2>
 
         <p className="mt-2 text-sm leading-6 text-gray-500">
@@ -938,4 +1232,8 @@ function SelectField({
   );
 }
 
+<<<<<<< HEAD
 export default TeamMemberForm;
+=======
+export default TeamMemberForm;
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)

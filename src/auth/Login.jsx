@@ -45,6 +45,7 @@ function Login() {
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
         <div className="w-full max-w-md">
 
+<<<<<<< HEAD
           {/* Header */}
           <div className="mb-8 text-center">
             <div className="mb-5 flex justify-center">
@@ -60,6 +61,19 @@ function Login() {
             </p>
 
             <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#2b2b2b]">
+=======
+          {/* Header with 3S Logo */}
+          <div className="mb-8 text-center">
+            <div className="mb-4 flex justify-center">
+              <img
+                src="/logo.png"
+                alt="3S Logo"
+                className="h-20 w-20 object-contain transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+
+            <h1 className="text-3xl font-semibold tracking-tight text-[#2b2b2b]">
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
               Welcome Back
             </h1>
 
