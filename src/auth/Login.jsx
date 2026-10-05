@@ -5,6 +5,8 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -22,10 +24,11 @@ function Login() {
 
     setLoading(true);
 
-    const { error: loginError } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
+    const { error: loginError } =
+      await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
 
     setLoading(false);
 
@@ -41,6 +44,7 @@ function Login() {
     <div className="min-h-screen bg-[#f5f3f7] px-4 py-8">
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
         <div className="w-full max-w-md">
+
           {/* Header */}
           <div className="mb-8 text-center">
             <div className="mb-5 flex justify-center">
@@ -70,6 +74,7 @@ function Login() {
 
             <div className="p-6 sm:p-8">
               <form onSubmit={handleSubmit} noValidate>
+
                 {/* Error */}
                 {error && (
                   <div
@@ -123,19 +128,96 @@ function Login() {
                     Password
                   </label>
 
-                  <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(event) => {
-                      setPassword(event.target.value);
-                      setError("");
-                    }}
-                    placeholder="Enter your password"
-                    autoComplete="current-password"
-                    disabled={loading}
-                    className="w-full rounded-md border border-gray-300 px-3.5 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#7500c0] focus:ring-2 focus:ring-[#7500c0]/20 disabled:cursor-not-allowed disabled:bg-gray-100"
-                  />
+                  <div className="relative">
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(event) => {
+                        setPassword(event.target.value);
+                        setError("");
+                      }}
+                      placeholder="Enter your password"
+                      autoComplete="current-password"
+                      disabled={loading}
+                      className="w-full rounded-md border border-gray-300 px-3.5 py-2.5 pr-11 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#7500c0] focus:ring-2 focus:ring-[#7500c0]/20 disabled:cursor-not-allowed disabled:bg-gray-100"
+                    />
+
+                    {/* Password visibility button */}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowPassword((value) => !value)
+                      }
+                      disabled={loading}
+                      aria-label={
+                        showPassword
+                          ? "Hide password"
+                          : "Show password"
+                      }
+                      className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-gray-500 transition hover:text-[#7500c0] disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {showPassword ? (
+                        /* Eye Off */
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M3 3l18 18"
+                          />
+
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M10.58 10.58a2 2 0 102.83 2.83"
+                          />
+
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M9.88 4.24A10.94 10.94 0 0112 4c5 0 8.5 4 9.5 8a11.7 11.7 0 01-2.06 3.74"
+                          />
+
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M6.61 6.61C4.65 7.83 3.29 9.63 2.5 12c.59 1.77 1.64 3.27 3.11 4.5C7.09 17.7 9.22 20 12 20c1.2 0 2.32-.3 3.36-.82"
+                          />
+                        </svg>
+                      ) : (
+                        /* Eye */
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"
+                          />
+
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="2.5"
+                            strokeWidth="2"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Forgot Password */}
