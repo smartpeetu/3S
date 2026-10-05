@@ -45,23 +45,6 @@ function Login() {
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
         <div className="w-full max-w-md">
 
-<<<<<<< HEAD
-          {/* Header */}
-          <div className="mb-8 text-center">
-            <div className="mb-5 flex justify-center">
-              <div className="flex items-end gap-1">
-                <span className="h-7 w-2 bg-[#a100ff]" />
-                <span className="h-10 w-2 bg-[#7500c0]" />
-                <span className="h-14 w-2 bg-[#460073]" />
-              </div>
-            </div>
-
-            <p className="text-sm font-medium tracking-wide text-[#7500c0]">
-              3S APPLICATION
-            </p>
-
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#2b2b2b]">
-=======
           {/* Header with 3S Logo */}
           <div className="mb-8 text-center">
             <div className="mb-4 flex justify-center">
@@ -73,7 +56,6 @@ function Login() {
             </div>
 
             <h1 className="text-3xl font-semibold tracking-tight text-[#2b2b2b]">
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
               Welcome Back
             </h1>
 
