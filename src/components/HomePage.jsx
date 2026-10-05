@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useAuth } from "../auth/useAuth";
 import TeamMemberForm from "./TeamMemberForm";
+<<<<<<< HEAD
+=======
+import TeamMembersList from "./TeamMembersList";
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
 function HomePage() {
   const {
@@ -11,6 +15,10 @@ function HomePage() {
 
   const [showMenu, setShowMenu] = useState(false);
   const [showTeamMemberForm, setShowTeamMemberForm] = useState(false);
+<<<<<<< HEAD
+=======
+  const [showHistory, setShowHistory] = useState(false);
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
   const [showProfile, setShowProfile] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
@@ -72,12 +80,20 @@ function HomePage() {
 
             {/* Brand */}
             <div className="flex min-w-0 items-center gap-3">
+<<<<<<< HEAD
 
               <div className="flex flex-shrink-0 items-end gap-1">
                 <span className="h-5 w-1.5 bg-[#a100ff]" />
                 <span className="h-7 w-1.5 bg-[#7500c0]" />
                 <span className="h-9 w-1.5 bg-[#460073]" />
               </div>
+=======
+              <img
+                src="/logo.png"
+                alt="3S Logo"
+                className="h-8 w-8 object-contain"
+              />
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
               <div className="min-w-0">
                 <p className="text-sm font-bold text-gray-900">
@@ -143,6 +159,73 @@ function HomePage() {
   }
 
   // ==================================================
+<<<<<<< HEAD
+=======
+  // HISTORY OF RECORDS SCREEN (ADMIN ONLY)
+  // ==================================================
+
+  if (showHistory && isAdmin) {
+    return (
+      <div className="min-h-screen bg-[#f5f3f7]">
+
+        {/* Header */}
+        <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur-xl">
+          <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+
+            {/* Brand */}
+            <div className="flex min-w-0 items-center gap-3">
+              <img
+                src="/logo.png"
+                alt="3S Logo"
+                className="h-8 w-8 object-contain"
+              />
+
+              <div className="min-w-0">
+                <p className="text-sm font-bold text-gray-900">
+                  3S
+                </p>
+
+                <p className="hidden text-xs text-gray-500 sm:block">
+                  Manage Team Members
+                </p>
+              </div>
+
+            </div>
+
+            {/* Back button */}
+            <button
+              type="button"
+              onClick={() => setShowHistory(false)}
+              className="flex flex-shrink-0 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:border-[#7500c0] hover:text-[#7500c0] hover:shadow-sm sm:px-4"
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+
+              <span>Back</span>
+            </button>
+
+          </div>
+        </header>
+
+        {/* Records Content */}
+        <TeamMembersList onBack={() => setShowHistory(false)} />
+      </div>
+    );
+  }
+
+  // ==================================================
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
   // PROFILE SCREEN
   // ==================================================
 
@@ -156,12 +239,20 @@ function HomePage() {
 
             {/* Brand */}
             <div className="flex min-w-0 items-center gap-3">
+<<<<<<< HEAD
 
               <div className="flex flex-shrink-0 items-end gap-1">
                 <span className="h-5 w-1.5 bg-[#a100ff]" />
                 <span className="h-7 w-1.5 bg-[#7500c0]" />
                 <span className="h-9 w-1.5 bg-[#460073]" />
               </div>
+=======
+              <img
+                src="/logo.png"
+                alt="3S Logo"
+                className="h-8 w-8 object-contain"
+              />
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
               <div className="min-w-0">
                 <p className="text-sm font-bold text-gray-900">
@@ -369,12 +460,20 @@ function HomePage() {
 
           {/* Brand */}
           <div className="flex min-w-0 items-center gap-3">
+<<<<<<< HEAD
 
             <div className="flex flex-shrink-0 items-end gap-1">
               <span className="h-5 w-1.5 bg-[#a100ff]" />
               <span className="h-7 w-1.5 bg-[#7500c0]" />
               <span className="h-9 w-1.5 bg-[#460073]" />
             </div>
+=======
+            <img
+              src="/logo.png"
+              alt="3S Logo"
+              className="h-9 w-9 object-contain"
+            />
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
             <div className="min-w-0">
               <p className="text-sm font-bold tracking-wide text-gray-900">
@@ -503,6 +602,44 @@ function HomePage() {
                     </div>
                   </button>
 
+<<<<<<< HEAD
+=======
+                  {/* History of Records (Admin Only) */}
+                  {isAdmin && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowMenu(false);
+                        setShowHistory(true);
+                      }}
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-gray-700 transition hover:bg-purple-50 hover:text-[#7500c0]"
+                    >
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50">
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+
+                      <div>
+                        <p>Manage Team Members</p>
+                        <p className="text-xs font-normal text-gray-400">
+                          View &amp; manage directory
+                        </p>
+                      </div>
+                    </button>
+                  )}
+
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
                   {/* Session */}
                   <div className="mt-1 rounded-xl px-3 py-3">
 
@@ -767,6 +904,79 @@ function HomePage() {
             )}
 
             {/* ======================================================= */}
+<<<<<<< HEAD
+=======
+            {/* MANAGE TEAM MEMBERS (ADMIN ONLY)                         */}
+            {/* ======================================================= */}
+
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={() => setShowHistory(true)}
+                className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#a100ff]/40 hover:shadow-xl"
+              >
+
+                {/* Shine */}
+                <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-purple-50 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+
+                <div className="relative">
+
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#7500c0] text-white shadow-lg shadow-purple-200 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3">
+
+                    <svg
+                      className="h-6 w-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+
+                  </div>
+
+                  <p className="mb-1 text-xs font-bold uppercase tracking-wider text-[#7500c0]">
+                    Admin
+                  </p>
+
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Manage Team Members
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-6 text-gray-500">
+                    View, filter, search, and manage all registered team members and their records.
+                  </p>
+
+                  <div className="mt-5 flex items-center gap-2 text-sm font-semibold text-[#7500c0]">
+
+                    Manage members
+
+                    <svg
+                      className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 12h14m-6-6l6 6-6 6"
+                      />
+                    </svg>
+
+                  </div>
+
+                </div>
+              </button>
+            )}
+
+            {/* ======================================================= */}
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
             {/* PROFILE                                                   */}
             {/* ======================================================= */}
 
@@ -824,6 +1034,7 @@ function HomePage() {
 
             </button>
 
+<<<<<<< HEAD
             {/* ======================================================= */}
             {/* COMING SOON                                               */}
             {/* ======================================================= */}
@@ -863,6 +1074,8 @@ function HomePage() {
 
             </div>
 
+=======
+>>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
           </div>
         </section>
 
