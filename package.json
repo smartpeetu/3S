@@ -21,10 +21,6 @@
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "oxlint": "^1.81.0",
-<<<<<<< HEAD
-=======
-    "sharp": "^0.35.5",
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
     "vite": "^8.3.0"
   }
 }

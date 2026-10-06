@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../auth/useAuth";
 import TeamMemberForm from "./TeamMemberForm";
-<<<<<<< HEAD
-=======
 import TeamMembersList from "./TeamMembersList";
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
 function HomePage() {
   const {
@@ -15,10 +12,7 @@ function HomePage() {
 
   const [showMenu, setShowMenu] = useState(false);
   const [showTeamMemberForm, setShowTeamMemberForm] = useState(false);
-<<<<<<< HEAD
-=======
   const [showHistory, setShowHistory] = useState(false);
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
   const [showProfile, setShowProfile] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
@@ -80,20 +74,11 @@ function HomePage() {
 
             {/* Brand */}
             <div className="flex min-w-0 items-center gap-3">
-<<<<<<< HEAD
-
-              <div className="flex flex-shrink-0 items-end gap-1">
-                <span className="h-5 w-1.5 bg-[#a100ff]" />
-                <span className="h-7 w-1.5 bg-[#7500c0]" />
-                <span className="h-9 w-1.5 bg-[#460073]" />
-              </div>
-=======
               <img
                 src="/logo.png"
                 alt="3S Logo"
                 className="h-8 w-8 object-contain"
               />
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
               <div className="min-w-0">
                 <p className="text-sm font-bold text-gray-900">
@@ -159,8 +144,6 @@ function HomePage() {
   }
 
   // ==================================================
-<<<<<<< HEAD
-=======
   // HISTORY OF RECORDS SCREEN (ADMIN ONLY)
   // ==================================================
 
@@ -225,7 +208,6 @@ function HomePage() {
   }
 
   // ==================================================
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
   // PROFILE SCREEN
   // ==================================================
 
@@ -239,20 +221,11 @@ function HomePage() {
 
             {/* Brand */}
             <div className="flex min-w-0 items-center gap-3">
-<<<<<<< HEAD
-
-              <div className="flex flex-shrink-0 items-end gap-1">
-                <span className="h-5 w-1.5 bg-[#a100ff]" />
-                <span className="h-7 w-1.5 bg-[#7500c0]" />
-                <span className="h-9 w-1.5 bg-[#460073]" />
-              </div>
-=======
               <img
                 src="/logo.png"
                 alt="3S Logo"
                 className="h-8 w-8 object-contain"
               />
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
               <div className="min-w-0">
                 <p className="text-sm font-bold text-gray-900">
@@ -460,20 +433,11 @@ function HomePage() {
 
           {/* Brand */}
           <div className="flex min-w-0 items-center gap-3">
-<<<<<<< HEAD
-
-            <div className="flex flex-shrink-0 items-end gap-1">
-              <span className="h-5 w-1.5 bg-[#a100ff]" />
-              <span className="h-7 w-1.5 bg-[#7500c0]" />
-              <span className="h-9 w-1.5 bg-[#460073]" />
-            </div>
-=======
             <img
               src="/logo.png"
               alt="3S Logo"
               className="h-9 w-9 object-contain"
             />
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
             <div className="min-w-0">
               <p className="text-sm font-bold tracking-wide text-gray-900">
@@ -602,8 +566,6 @@ function HomePage() {
                     </div>
                   </button>
 
-<<<<<<< HEAD
-=======
                   {/* History of Records (Admin Only) */}
                   {isAdmin && (
                     <button
@@ -639,7 +601,6 @@ function HomePage() {
                     </button>
                   )}
 
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
                   {/* Session */}
                   <div className="mt-1 rounded-xl px-3 py-3">
 
@@ -904,8 +865,6 @@ function HomePage() {
             )}
 
             {/* ======================================================= */}
-<<<<<<< HEAD
-=======
             {/* MANAGE TEAM MEMBERS (ADMIN ONLY)                         */}
             {/* ======================================================= */}
 
@@ -976,7 +935,6 @@ function HomePage() {
             )}
 
             {/* ======================================================= */}
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
             {/* PROFILE                                                   */}
             {/* ======================================================= */}
 
@@ -1034,48 +992,6 @@ function HomePage() {
 
             </button>
 
-<<<<<<< HEAD
-            {/* ======================================================= */}
-            {/* COMING SOON                                               */}
-            {/* ======================================================= */}
-
-            <div className="rounded-2xl border border-dashed border-gray-300 bg-white/60 p-6">
-
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 text-gray-500">
-
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
-
-              </div>
-
-              <h3 className="text-lg font-semibold text-gray-800">
-                More Features
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-gray-500">
-                Additional team features will become available
-                here as the application grows.
-              </p>
-
-              <div className="mt-5 inline-flex rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-500">
-                Coming soon
-              </div>
-
-            </div>
-
-=======
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
           </div>
         </section>
 

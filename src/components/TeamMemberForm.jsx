@@ -15,12 +15,6 @@ const initialFormData = {
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_PHOTO_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
-<<<<<<< HEAD
-function TeamMemberForm() {
-  const [formData, setFormData] = useState(initialFormData);
-  const [photoFile, setPhotoFile] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState("");
-=======
 function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = false }) {
   const isEditMode = Boolean(initialData && initialData.id);
 
@@ -42,16 +36,12 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
 
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(initialData?.photo_url || "");
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [submitError, setSubmitError] = useState("");
   const fileInputRef = useRef(null);
-<<<<<<< HEAD
-=======
   const isBlobUrlRef = useRef(false);
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -100,22 +90,11 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
       photo: "",
     }));
 
-<<<<<<< HEAD
-    if (photoPreview) {
-=======
     if (photoPreview && isBlobUrlRef.current) {
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       URL.revokeObjectURL(photoPreview);
     }
 
     setPhotoFile(file);
-<<<<<<< HEAD
-    setPhotoPreview(URL.createObjectURL(file));
-  };
-
-  const handleRemovePhoto = () => {
-    if (photoPreview) {
-=======
     const newBlob = URL.createObjectURL(file);
     isBlobUrlRef.current = true;
     setPhotoPreview(newBlob);
@@ -123,15 +102,11 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
 
   const handleRemovePhoto = () => {
     if (photoPreview && isBlobUrlRef.current) {
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       URL.revokeObjectURL(photoPreview);
     }
     setPhotoFile(null);
     setPhotoPreview("");
-<<<<<<< HEAD
-=======
     isBlobUrlRef.current = false;
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
     setErrors((prev) => ({
       ...prev,
       photo: "",
@@ -202,15 +177,9 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
     let uploadedFilePath = null;
 
     try {
-<<<<<<< HEAD
-      let photoUrl = null;
-
-      // Upload photo to Supabase Storage if one was selected
-=======
       let photoUrl = initialData?.photo_url || null;
 
       // Upload photo to Supabase Storage if a new file was chosen
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       if (photoFile) {
         const fileExt = photoFile.name.split(".").pop().toLowerCase();
         const sanitizedBase = photoFile.name
@@ -247,12 +216,9 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
           .getPublicUrl(filePath);
 
         photoUrl = publicUrlData?.publicUrl || null;
-<<<<<<< HEAD
-=======
       } else if (!photoPreview) {
         // User removed the photo
         photoUrl = null;
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       }
 
       const dbRecord = {
@@ -267,55 +233,6 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
         photo_url: photoUrl,
       };
 
-<<<<<<< HEAD
-      console.log("Saving team member:", dbRecord);
-
-      const { error } = await supabase
-        .from("team_members")
-        .insert([dbRecord]);
-
-      if (error) {
-        console.error("Supabase insert failed:", error);
-
-        // Roll back uploaded photo to prevent orphaned storage objects
-        if (uploadedFilePath) {
-          try {
-            await supabase.storage
-              .from("team-member-photos")
-              .remove([uploadedFilePath]);
-          } catch (cleanupErr) {
-            console.warn("Storage cleanup failed:", cleanupErr);
-          }
-        }
-
-        setSubmitError(
-          error.message
-            ? `Database error: ${error.message}`
-            : "Unable to register the team member. Please try again."
-        );
-        return;
-      }
-
-      setSuccessMessage(
-        "Team member has been registered successfully."
-      );
-
-      // Clean up form inputs and photo previews
-      setErrors({});
-      setFormData(initialFormData);
-      if (photoPreview) {
-        URL.revokeObjectURL(photoPreview);
-      }
-      setPhotoFile(null);
-      setPhotoPreview("");
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    } catch (error) {
-      console.error("Unexpected submission error:", error);
-
-      // Roll back uploaded photo on unexpected error
-=======
       if (isEditMode) {
         const updatePayload = {
           ...dbRecord,
@@ -409,7 +326,6 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
     } catch (error) {
       console.error("Unexpected submission error:", error);
 
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       if (uploadedFilePath) {
         try {
           await supabase.storage
@@ -423,11 +339,7 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
       setSubmitError(
         error?.message
           ? `Unexpected error: ${error.message}`
-<<<<<<< HEAD
-          : "Something went wrong while registering the team member."
-=======
           : "Something went wrong while saving the team member."
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
       );
     } finally {
       setIsSubmitting(false);
@@ -437,14 +349,6 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
   const handleReset = () => {
     if (isSubmitting) return;
 
-<<<<<<< HEAD
-    setFormData(initialFormData);
-    if (photoPreview) {
-      URL.revokeObjectURL(photoPreview);
-    }
-    setPhotoFile(null);
-    setPhotoPreview("");
-=======
     if (isEditMode && initialData) {
       setFormData({
         name: initialData.name || "",
@@ -472,7 +376,6 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
       isBlobUrlRef.current = false;
     }
 
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -483,11 +386,7 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
 
   useEffect(() => {
     return () => {
-<<<<<<< HEAD
-      if (photoPreview) {
-=======
       if (photoPreview && isBlobUrlRef.current) {
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
         URL.revokeObjectURL(photoPreview);
       }
     };
@@ -495,21 +394,14 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
 
   const closeSuccessPopup = () => {
     setSuccessMessage("");
-<<<<<<< HEAD
-=======
     if (onSuccess) {
       onSuccess();
     }
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
   };
 
   return (
     <>
-<<<<<<< HEAD
-      <div className="min-h-screen bg-[#f5f3f7] px-4 py-8 sm:px-6 lg:px-8">
-=======
       <div className={embedded ? "p-0" : "min-h-screen bg-[#f5f3f7] px-4 py-8 sm:px-6 lg:px-8"}>
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
         <div className="mx-auto max-w-5xl">
 
           {/* Header */}
@@ -520,14 +412,6 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
               </p>
 
               <h1 className="mt-1 text-2xl font-semibold tracking-tight text-[#2b2b2b] sm:text-3xl">
-<<<<<<< HEAD
-                Team Member Registration
-              </h1>
-
-              <p className="mt-2 text-sm text-gray-600">
-                Register a team member by providing their basic
-                professional information.
-=======
                 {isEditMode ? "Edit Team Member" : "Team Member Registration"}
               </h1>
 
@@ -535,7 +419,6 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
                 {isEditMode
                   ? `Update personal and professional information for ${initialData?.name || "this team member"}.`
                   : "Register a team member by providing their basic professional information."}
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
               </p>
             </div>
 
@@ -558,18 +441,6 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
             <div className="p-6 sm:p-8">
 
               {/* Section heading */}
-<<<<<<< HEAD
-              <div className="mb-7 border-b border-gray-200 pb-5">
-                <h2 className="text-lg font-semibold text-[#2b2b2b]">
-                  Team Member Details
-                </h2>
-
-                <p className="mt-1 text-sm text-gray-500">
-                  Fields marked with{" "}
-                  <span className="text-red-500">*</span>{" "}
-                  are mandatory.
-                </p>
-=======
               <div className="mb-7 flex items-center justify-between border-b border-gray-200 pb-5">
                 <div>
                   <h2 className="text-lg font-semibold text-[#2b2b2b]">
@@ -595,7 +466,6 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
                     Back to Records
                   </button>
                 )}
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
               </div>
 
               {/* Error Message */}
@@ -620,11 +490,7 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
 
                   <div>
                     <p className="font-medium">
-<<<<<<< HEAD
-                      Registration failed
-=======
                       {isEditMode ? "Update failed" : "Registration failed"}
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
                     </p>
 
                     <p className="mt-0.5">
@@ -776,11 +642,7 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
                   </div>
                 </div>
 
-<<<<<<< HEAD
-                {/* Profile Photo (at bottom of form) */}
-=======
                 {/* Profile Photo */}
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
                 <div className="mb-8">
                   <h3 className="mb-5 text-sm font-semibold uppercase tracking-wide text-[#7500c0]">
                     Profile Photo
@@ -900,8 +762,6 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
                 {/* Actions */}
                 <div className="flex flex-col-reverse gap-3 border-t border-gray-200 pt-6 sm:flex-row sm:justify-end">
 
-<<<<<<< HEAD
-=======
                   {onCancel && (
                     <button
                       type="button"
@@ -913,7 +773,6 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
                     </button>
                   )}
 
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
                   <button
                     type="button"
                     onClick={handleReset}
@@ -931,19 +790,11 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
                     {isSubmitting ? (
                       <>
                         <LoadingSpinner />
-<<<<<<< HEAD
-                        <span>Registering...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Register Team Member</span>
-=======
                         <span>{isEditMode ? "Saving Changes..." : "Registering..."}</span>
                       </>
                     ) : (
                       <>
                         <span>{isEditMode ? "Save Changes" : "Register Team Member"}</span>
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
                         <svg
                           className="h-4 w-4"
                           fill="none"
@@ -966,17 +817,11 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
           </div>
 
           {/* Footer */}
-<<<<<<< HEAD
-          <p className="mt-5 text-center text-xs text-gray-500">
-            3S Application · Team Member Registration
-          </p>
-=======
           {!embedded && (
             <p className="mt-5 text-center text-xs text-gray-500">
               3S Application · Team Member Registration
             </p>
           )}
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
         </div>
       </div>
 
@@ -984,10 +829,7 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
       {successMessage && (
         <SuccessModal
           message={successMessage}
-<<<<<<< HEAD
-=======
           title={isEditMode ? "Update Successful" : "Registration Successful"}
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
           onClose={closeSuccessPopup}
         />
       )}
@@ -1029,11 +871,7 @@ function LoadingSpinner() {
 /* Success Modal                                                              */
 /* -------------------------------------------------------------------------- */
 
-<<<<<<< HEAD
-function SuccessModal({ message, onClose }) {
-=======
 function SuccessModal({ message, title = "Registration Successful", onClose }) {
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
@@ -1041,11 +879,7 @@ function SuccessModal({ message, title = "Registration Successful", onClose }) {
       aria-modal="true"
       aria-labelledby="success-title"
     >
-<<<<<<< HEAD
-      <div className="w-full max-w-md animate-[successIn_0.25s_ease-out] rounded-2xl bg-white p-8 text-center shadow-2xl">
-=======
       <div className="w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-2xl">
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
 
         {/* Success Icon */}
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
@@ -1072,11 +906,7 @@ function SuccessModal({ message, title = "Registration Successful", onClose }) {
           id="success-title"
           className="mt-5 text-xl font-semibold text-gray-900"
         >
-<<<<<<< HEAD
-          Registration Successful
-=======
           {title}
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
         </h2>
 
         <p className="mt-2 text-sm leading-6 text-gray-500">
@@ -1232,8 +1062,4 @@ function SelectField({
   );
 }
 
-<<<<<<< HEAD
 export default TeamMemberForm;
-=======
-export default TeamMemberForm;
->>>>>>> 579c4c6 (feat: add manage team members card, registration navigation, and updated logo)
