@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
+import ForgotPassword from "./ForgotPassword";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -39,6 +41,14 @@ function Login() {
 
     setSuccess("Login successful.");
   };
+
+  if (showForgotPassword) {
+  return (
+    <ForgotPassword
+      onBack={() => setShowForgotPassword(false)}
+    />
+  );
+}
 
   return (
     <div className="min-h-screen bg-[#f5f3f7] px-4 py-8">
@@ -220,6 +230,7 @@ function Login() {
                 <div className="mb-6 text-right">
                   <button
                     type="button"
+                    onClick={() => setShowForgotPassword(true)}
                     className="text-sm font-medium text-[#7500c0] hover:text-[#5f0099] hover:underline"
                   >
                     Forgot Password?
