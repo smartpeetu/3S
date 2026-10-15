@@ -2,18 +2,16 @@ import { useState } from "react";
 import { useAuth } from "../auth/useAuth";
 import TeamMemberForm from "./TeamMemberForm";
 import TeamMembersList from "./TeamMembersList";
+import ChangeMyPassword from "../auth/ChangeMyPassword";
 
 function HomePage() {
-  const {
-    profile,
-    user,
-    logout,
-  } = useAuth();
+  const { profile, user, logout } = useAuth();
 
   const [showMenu, setShowMenu] = useState(false);
   const [showTeamMemberForm, setShowTeamMemberForm] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
   // --------------------------------------------------
@@ -26,10 +24,7 @@ function HomePage() {
     user?.email?.split("@")[0] ||
     "User";
 
-  const email =
-    user?.email ||
-    profile?.email ||
-    "Not available";
+  const email = user?.email || profile?.email || "Not available";
 
   const role = profile?.role || "User";
 
@@ -67,11 +62,9 @@ function HomePage() {
   if (showTeamMemberForm) {
     return (
       <div className="min-h-screen bg-[#f5f3f7]">
-
         {/* Header */}
         <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur-xl">
           <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-
             {/* Brand */}
             <div className="flex min-w-0 items-center gap-3">
               <img
@@ -81,15 +74,12 @@ function HomePage() {
               />
 
               <div className="min-w-0">
-                <p className="text-sm font-bold text-gray-900">
-                  3S
-                </p>
+                <p className="text-sm font-bold text-gray-900">3S</p>
 
                 <p className="hidden text-xs text-gray-500 sm:block">
                   Team Workspace
                 </p>
               </div>
-
             </div>
 
             {/* Back */}
@@ -114,13 +104,11 @@ function HomePage() {
 
               <span>Back</span>
             </button>
-
           </div>
         </header>
 
         {/* Form */}
         <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-
           <div className="mb-8">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7500c0]">
               Administration
@@ -131,13 +119,11 @@ function HomePage() {
             </h1>
 
             <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-500 sm:text-base">
-              Create a team member profile and assign their application
-              access.
+              Create a team member profile and assign their application access.
             </p>
           </div>
 
           <TeamMemberForm />
-
         </main>
       </div>
     );
@@ -150,11 +136,9 @@ function HomePage() {
   if (showHistory && isAdmin) {
     return (
       <div className="min-h-screen bg-[#f5f3f7]">
-
         {/* Header */}
         <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur-xl">
           <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-
             {/* Brand */}
             <div className="flex min-w-0 items-center gap-3">
               <img
@@ -164,15 +148,12 @@ function HomePage() {
               />
 
               <div className="min-w-0">
-                <p className="text-sm font-bold text-gray-900">
-                  3S
-                </p>
+                <p className="text-sm font-bold text-gray-900">3S</p>
 
                 <p className="hidden text-xs text-gray-500 sm:block">
                   Manage Team Members
                 </p>
               </div>
-
             </div>
 
             {/* Back button */}
@@ -197,7 +178,6 @@ function HomePage() {
 
               <span>Back</span>
             </button>
-
           </div>
         </header>
 
@@ -208,17 +188,23 @@ function HomePage() {
   }
 
   // ==================================================
+  // CHANGE PASSWORD SCREEN
+  // ==================================================
+
+  if (showChangePassword) {
+    return <ChangeMyPassword onBack={() => setShowChangePassword(false)} />;
+  }
+
+  // ==================================================
   // PROFILE SCREEN
   // ==================================================
 
   if (showProfile) {
     return (
       <div className="min-h-screen bg-[#f5f3f7] text-[#2b2b2b]">
-
         {/* Header */}
         <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur-xl">
           <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-
             {/* Brand */}
             <div className="flex min-w-0 items-center gap-3">
               <img
@@ -228,15 +214,12 @@ function HomePage() {
               />
 
               <div className="min-w-0">
-                <p className="text-sm font-bold text-gray-900">
-                  3S
-                </p>
+                <p className="text-sm font-bold text-gray-900">3S</p>
 
                 <p className="hidden text-xs text-gray-500 sm:block">
                   My Profile
                 </p>
               </div>
-
             </div>
 
             {/* Back */}
@@ -261,13 +244,11 @@ function HomePage() {
 
               <span>Back</span>
             </button>
-
           </div>
         </header>
 
         {/* Profile */}
         <main className="relative mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-
           {/* Background glow */}
           <div className="pointer-events-none fixed left-0 top-20 -z-10 h-96 w-96 rounded-full bg-[#a100ff]/10 blur-3xl" />
 
@@ -287,23 +268,19 @@ function HomePage() {
 
           {/* Profile Card */}
           <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-xl">
-
             {/* Profile Hero */}
             <div className="relative overflow-hidden bg-[#2b2b2b] px-6 py-8 text-white sm:px-10 sm:py-10">
-
               <div className="pointer-events-none absolute -right-20 -top-32 h-80 w-80 rounded-full bg-[#a100ff]/25 blur-3xl" />
 
               <div className="pointer-events-none absolute right-10 top-0 hidden h-[400px] w-2 rotate-[25deg] bg-[#a100ff]/30 sm:block" />
 
               <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
-
                 {/* Avatar */}
                 <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-full bg-[#7500c0] text-2xl font-bold shadow-xl shadow-purple-950/30">
                   {initials}
                 </div>
 
                 <div className="min-w-0">
-
                   <h2 className="break-words text-2xl font-semibold sm:text-3xl">
                     {userName}
                   </h2>
@@ -313,7 +290,6 @@ function HomePage() {
                   </p>
 
                   <div className="mt-3 flex flex-wrap items-center gap-2">
-
                     <span className="inline-flex rounded-full bg-[#a100ff]/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-[#d99cff]">
                       {role}
                     </span>
@@ -322,33 +298,21 @@ function HomePage() {
                       <span className="h-2 w-2 rounded-full bg-green-400" />
                       Active
                     </span>
-
                   </div>
                 </div>
-
               </div>
             </div>
 
             {/* Information */}
             <div className="grid grid-cols-1 sm:grid-cols-2">
-
               {/* Name */}
-              <ProfileField
-                label="Name"
-                value={profile?.name}
-              />
+              <ProfileField label="Name" value={profile?.name} />
 
               {/* Email */}
-              <ProfileField
-                label="Email"
-                value={email}
-              />
+              <ProfileField label="Email" value={email} />
 
               {/* Location */}
-              <ProfileField
-                label="Location"
-                value={profile?.location}
-              />
+              <ProfileField label="Location" value={profile?.location} />
 
               {/* Career Level */}
               <ProfileField
@@ -393,10 +357,44 @@ function HomePage() {
                   </span>
                 </div>
               </div>
-
             </div>
           </div>
 
+          {/* Password Management */}
+          <div className="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <div className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-base font-semibold text-gray-900">
+                  Password & Security
+                </h2>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Update your password to keep your account secure.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowChangePassword(true)}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7500c0] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#5f0099] focus:outline-none focus:ring-2 focus:ring-[#a100ff] focus:ring-offset-2"
+              >
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-7a2 2 0 00-2-2H6a2 2 0 00-2 2v7a2 2 0 002 2zm10-11V7a4 4 0 00-8 0v4h8z"
+                  />
+                </svg>
+                Change Password
+              </button>
+            </div>
+          </div>
         </main>
       </div>
     );
@@ -408,19 +406,16 @@ function HomePage() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f5f3f7] text-[#2b2b2b]">
-
       {/* ============================================================= */}
       {/* BACKGROUND                                                     */}
       {/* ============================================================= */}
 
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-
         <div className="absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-[#a100ff]/10 blur-3xl" />
 
         <div className="absolute -right-40 top-40 h-[500px] w-[500px] rounded-full bg-[#7500c0]/10 blur-3xl" />
 
         <div className="absolute bottom-0 left-1/3 h-[400px] w-[400px] rounded-full bg-purple-300/10 blur-3xl" />
-
       </div>
 
       {/* ============================================================= */}
@@ -428,9 +423,7 @@ function HomePage() {
       {/* ============================================================= */}
 
       <header className="sticky top-0 z-50 border-b border-gray-200/80 bg-white/95 shadow-sm backdrop-blur-xl">
-
         <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-
           {/* Brand */}
           <div className="flex min-w-0 items-center gap-3">
             <img
@@ -448,19 +441,16 @@ function HomePage() {
                 Team Workspace
               </p>
             </div>
-
           </div>
 
           {/* User menu */}
           <div className="relative flex-shrink-0">
-
             <button
               type="button"
               onClick={() => setShowMenu((value) => !value)}
               aria-expanded={showMenu}
               className="flex items-center gap-2 rounded-full border border-gray-200 bg-white p-1.5 pr-2.5 shadow-sm transition hover:border-[#7500c0] hover:shadow-md sm:gap-3"
             >
-
               {/* Avatar */}
               <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#7500c0] text-xs font-bold text-white sm:h-10 sm:w-10 sm:text-sm">
                 {initials}
@@ -468,15 +458,11 @@ function HomePage() {
 
               {/* User information */}
               <div className="hidden min-w-0 text-left md:block">
-
                 <p className="max-w-[140px] truncate text-sm font-semibold text-gray-800">
                   {userName}
                 </p>
 
-                <p className="text-xs font-medium text-[#7500c0]">
-                  {role}
-                </p>
-
+                <p className="text-xs font-medium text-[#7500c0]">{role}</p>
               </div>
 
               <svg
@@ -494,45 +480,34 @@ function HomePage() {
                   d="M19 9l-7 7-7-7"
                 />
               </svg>
-
             </button>
 
             {/* Dropdown */}
             {showMenu && (
               <div className="absolute right-0 mt-3 w-[280px] max-w-[calc(100vw-2rem)] origin-top-right animate-[menuIn_0.15s_ease-out] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
-
                 {/* User */}
                 <div className="border-b border-gray-100 bg-gray-50/80 p-4">
-
                   <div className="flex items-center gap-3">
-
                     <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#7500c0] text-sm font-bold text-white">
                       {initials}
                     </div>
 
                     <div className="min-w-0">
-
                       <p className="truncate text-sm font-semibold text-gray-900">
                         {userName}
                       </p>
 
-                      <p className="truncate text-xs text-gray-500">
-                        {email}
-                      </p>
+                      <p className="truncate text-xs text-gray-500">{email}</p>
 
                       <span className="mt-1 inline-flex rounded-full bg-purple-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#7500c0]">
                         {role}
                       </span>
-
                     </div>
-
                   </div>
-
                 </div>
 
                 {/* Menu */}
                 <div className="p-2">
-
                   {/* Profile */}
                   <button
                     type="button"
@@ -603,9 +578,7 @@ function HomePage() {
 
                   {/* Session */}
                   <div className="mt-1 rounded-xl px-3 py-3">
-
                     <div className="flex items-center gap-3">
-
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-50">
                         <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
                       </div>
@@ -619,9 +592,7 @@ function HomePage() {
                           Securely signed in
                         </p>
                       </div>
-
                     </div>
-
                   </div>
 
                   {/* Logout */}
@@ -631,9 +602,7 @@ function HomePage() {
                     disabled={loggingOut}
                     className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-gray-700 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50">
-
                       {loggingOut ? (
                         <span className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-red-500" />
                       ) : (
@@ -651,17 +620,13 @@ function HomePage() {
                           />
                         </svg>
                       )}
-
                     </div>
 
                     {loggingOut ? "Signing out..." : "Sign out"}
-
                   </button>
-
                 </div>
               </div>
             )}
-
           </div>
         </div>
       </header>
@@ -671,13 +636,11 @@ function HomePage() {
       {/* ============================================================= */}
 
       <main className="relative z-10 mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-
         {/* =========================================================== */}
         {/* HERO                                                         */}
         {/* =========================================================== */}
 
         <section className="relative overflow-hidden rounded-[28px] bg-[#2b2b2b] px-6 py-10 text-white shadow-2xl sm:px-10 sm:py-14 lg:px-14 lg:py-16">
-
           {/* Glow */}
           <div className="pointer-events-none absolute -right-32 -top-40 h-[500px] w-[500px] rounded-full bg-[#a100ff]/25 blur-3xl" />
 
@@ -685,59 +648,45 @@ function HomePage() {
 
           {/* Decorative bars */}
           <div className="pointer-events-none absolute right-[-30px] top-[-80px] hidden h-[500px] w-[300px] opacity-30 sm:block">
-
             <div className="absolute right-32 top-0 h-[650px] w-2 rotate-[25deg] bg-[#a100ff]" />
 
             <div className="absolute right-20 top-0 h-[650px] w-2 rotate-[25deg] bg-[#7500c0]" />
 
             <div className="absolute right-8 top-0 h-[650px] w-2 rotate-[25deg] bg-[#460073]" />
-
           </div>
 
           <div className="relative max-w-3xl">
-
             {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-2 backdrop-blur">
-
               <span className="relative flex h-2 w-2">
-
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#a100ff] opacity-75" />
 
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[#c46cff]" />
-
               </span>
 
               <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-gray-200">
                 {isAdmin ? "Admin Workspace" : "Team Workspace"}
               </span>
-
             </div>
 
             {/* Greeting */}
             <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-
               Welcome,
-
               <br />
-
               <span className="bg-gradient-to-r from-[#c46cff] to-white bg-clip-text text-transparent">
                 {userName}
               </span>{" "}
               👋
-
             </h1>
 
             <p className="mt-5 max-w-2xl text-sm leading-7 text-gray-300 sm:text-base lg:text-lg">
-              Welcome to your team workspace. Access your profile,
-              manage team information, and explore the features
-              available to you.
+              Welcome to your team workspace. Access your profile, manage team
+              information, and explore the features available to you.
             </p>
 
             {/* Role */}
             <div className="mt-8 flex flex-wrap items-center gap-3">
-
               <div className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-2 backdrop-blur">
-
                 <svg
                   className="h-4 w-4 text-[#c46cff]"
                   fill="none"
@@ -755,21 +704,16 @@ function HomePage() {
                 <span className="text-xs font-medium text-gray-200">
                   Signed in as {role}
                 </span>
-
               </div>
 
               {isAdmin && (
                 <div className="inline-flex items-center gap-2 rounded-lg border border-[#a100ff]/30 bg-[#a100ff]/10 px-3 py-2">
-
                   <span className="text-xs font-semibold text-[#d99cff]">
                     Administrative access
                   </span>
-
                 </div>
               )}
-
             </div>
-
           </div>
         </section>
 
@@ -778,9 +722,7 @@ function HomePage() {
         {/* =========================================================== */}
 
         <section className="mt-10">
-
           <div className="mb-6">
-
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7500c0]">
               Quick Actions
             </p>
@@ -788,11 +730,9 @@ function HomePage() {
             <h2 className="mt-1 text-2xl font-semibold tracking-tight text-[#2b2b2b] sm:text-3xl">
               What would you like to do?
             </h2>
-
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-
             {/* ======================================================= */}
             {/* ADMIN ACTION                                             */}
             {/* ======================================================= */}
@@ -803,14 +743,11 @@ function HomePage() {
                 onClick={() => setShowTeamMemberForm(true)}
                 className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#a100ff]/40 hover:shadow-xl"
               >
-
                 {/* Shine */}
                 <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-purple-50 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
 
                 <div className="relative">
-
                   <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#7500c0] text-white shadow-lg shadow-purple-200 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-
                     <svg
                       className="h-6 w-6"
                       fill="none"
@@ -824,7 +761,6 @@ function HomePage() {
                         d="M12 4v16m8-8H4"
                       />
                     </svg>
-
                   </div>
 
                   <p className="mb-1 text-xs font-bold uppercase tracking-wider text-[#7500c0]">
@@ -836,14 +772,12 @@ function HomePage() {
                   </h3>
 
                   <p className="mt-2 text-sm leading-6 text-gray-500">
-                    Create a new authorized team member and assign
-                    their application role.
+                    Create a new authorized team member and assign their
+                    application role.
                   </p>
 
                   <div className="mt-5 flex items-center gap-2 text-sm font-semibold text-[#7500c0]">
-
                     Create member
-
                     <svg
                       className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
                       fill="none"
@@ -857,9 +791,7 @@ function HomePage() {
                         d="M5 12h14m-6-6l6 6-6 6"
                       />
                     </svg>
-
                   </div>
-
                 </div>
               </button>
             )}
@@ -874,14 +806,11 @@ function HomePage() {
                 onClick={() => setShowHistory(true)}
                 className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#a100ff]/40 hover:shadow-xl"
               >
-
                 {/* Shine */}
                 <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-purple-50 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
 
                 <div className="relative">
-
                   <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#7500c0] text-white shadow-lg shadow-purple-200 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3">
-
                     <svg
                       className="h-6 w-6"
                       fill="none"
@@ -895,7 +824,6 @@ function HomePage() {
                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                       />
                     </svg>
-
                   </div>
 
                   <p className="mb-1 text-xs font-bold uppercase tracking-wider text-[#7500c0]">
@@ -907,13 +835,12 @@ function HomePage() {
                   </h3>
 
                   <p className="mt-2 text-sm leading-6 text-gray-500">
-                    View, filter, search, and manage all registered team members and their records.
+                    View, filter, search, and manage all registered team members
+                    and their records.
                   </p>
 
                   <div className="mt-5 flex items-center gap-2 text-sm font-semibold text-[#7500c0]">
-
                     Manage members
-
                     <svg
                       className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
                       fill="none"
@@ -927,9 +854,7 @@ function HomePage() {
                         d="M5 12h14m-6-6l6 6-6 6"
                       />
                     </svg>
-
                   </div>
-
                 </div>
               </button>
             )}
@@ -943,9 +868,7 @@ function HomePage() {
               onClick={() => setShowProfile(true)}
               className="group rounded-2xl border border-gray-200 bg-white p-6 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#a100ff]/40 hover:shadow-xl"
             >
-
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-[#7500c0] transition-all duration-300 group-hover:scale-110">
-
                 <svg
                   className="h-6 w-6"
                   fill="none"
@@ -959,7 +882,6 @@ function HomePage() {
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7-7h14a7 7 0 00-7 7z"
                   />
                 </svg>
-
               </div>
 
               <h3 className="text-lg font-semibold text-gray-900">
@@ -971,9 +893,7 @@ function HomePage() {
               </p>
 
               <div className="mt-5 flex items-center gap-2 text-sm font-semibold text-[#7500c0]">
-
                 View profile
-
                 <svg
                   className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
                   fill="none"
@@ -987,11 +907,8 @@ function HomePage() {
                     d="M5 12h14m-6-6l6 6-6 6"
                   />
                 </svg>
-
               </div>
-
             </button>
-
           </div>
         </section>
 
@@ -1000,9 +917,7 @@ function HomePage() {
         {/* =========================================================== */}
 
         <section className="mt-10 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-
           <div className="border-b border-gray-100 px-6 py-5">
-
             <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#7500c0]">
               Account
             </p>
@@ -1010,14 +925,11 @@ function HomePage() {
             <h2 className="mt-1 text-lg font-semibold text-gray-900">
               Your information
             </h2>
-
           </div>
 
           <div className="grid grid-cols-1 divide-y divide-gray-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-
             {/* Name */}
             <div className="p-6">
-
               <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
                 Name
               </p>
@@ -1025,12 +937,10 @@ function HomePage() {
               <p className="mt-2 truncate text-sm font-semibold text-gray-800">
                 {userName}
               </p>
-
             </div>
 
             {/* Email */}
             <div className="p-6">
-
               <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
                 Email
               </p>
@@ -1038,12 +948,10 @@ function HomePage() {
               <p className="mt-2 break-all text-sm font-semibold text-gray-800">
                 {email}
               </p>
-
             </div>
 
             {/* Role */}
             <div className="p-6">
-
               <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
                 Role
               </p>
@@ -1051,12 +959,9 @@ function HomePage() {
               <span className="mt-2 inline-flex rounded-full bg-purple-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-[#7500c0]">
                 {role}
               </span>
-
             </div>
-
           </div>
         </section>
-
       </main>
 
       {/* ============================================================= */}
@@ -1064,23 +969,14 @@ function HomePage() {
       {/* ============================================================= */}
 
       <footer className="relative z-10 mt-8 border-t border-gray-200 bg-white">
-
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-6 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-
-          <span>
-            3S Team Workspace
-          </span>
+          <span>3S Team Workspace</span>
 
           <span className="flex items-center gap-2">
-
             <span className="h-2 w-2 rounded-full bg-green-500" />
-
             Secure session active
-
           </span>
-
         </div>
-
       </footer>
 
       {/* ============================================================= */}
@@ -1100,7 +996,6 @@ function HomePage() {
           }
         }
       `}</style>
-
     </div>
   );
 }
