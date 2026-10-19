@@ -41,6 +41,17 @@ function DeleteConfirmModal({ member, isDeleting, onConfirm, onCancel }) {
             <br />
             This action cannot be undone.
           </p>
+
+          {member.photo_url && (
+            <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-1.5 text-xs text-gray-600 border border-gray-200">
+              <img
+                src={member.photo_url}
+                alt={member.name}
+                className="h-5 w-5 rounded-full object-cover"
+              />
+              <span>Profile photo in Supabase Storage will also be deleted</span>
+            </div>
+          )}
         </div>
 
         {/* Action Buttons */}

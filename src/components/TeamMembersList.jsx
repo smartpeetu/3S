@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { supabase } from "../lib/supabase";
+import { getStoragePathFromPhotoUrl, deletePhotoFromStorage } from "../lib/storage";
 import TeamMemberForm from "./TeamMemberForm";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 
@@ -10,6 +11,7 @@ function TeamMembersList({ onBack }) {
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState("");
   const [actionSuccess, setActionSuccess] = useState("");
+  const [actionError, setActionError] = useState("");
 
   // Search & Filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -158,53 +160,77 @@ function TeamMembersList({ onBack }) {
     if (!deletingMember) return;
 
     setIsDeleting(true);
+    setActionError("");
+    setActionSuccess("");
+
     try {
-      // Remove from team_members table
-      const { data, error } = await supabase
+      // 1. Identify the Storage object associated with the team member before deleting the database record
+      const memberId = deletingMember.id;
+      const memberName = deletingMember.name || "Team member";
+      const photoUrl = deletingMember.photo_url;
+      const storagePath = getStoragePathFromPhotoUrl(photoUrl);
+
+      // 2. Remove the record from team_members table
+      const { data, error: dbError } = await supabase
         .from("team_members")
         .delete()
-        .eq("id", deletingMember.id)
+        .eq("id", memberId)
         .select();
 
-      if (error) {
-        console.error("Delete failed:", error);
-        alert(`Failed to delete team member: ${error.message}`);
+      if (dbError) {
+        console.error("Database delete failed:", dbError);
+        setActionError(`Failed to delete team member: ${dbError.message || "Unknown database error"}`);
         setIsDeleting(false);
+        setDeletingMember(null);
         return;
       }
 
       if (!data || data.length === 0) {
-        alert(
-          "Delete blocked by Supabase: Row Level Security (RLS) did not permit deleting this row. Please check your Supabase DELETE policy or disable RLS."
+        setActionError(
+          "Delete blocked by Supabase: Row Level Security (RLS) did not permit deleting this record. Please verify your Supabase DELETE policy."
         );
         setIsDeleting(false);
+        setDeletingMember(null);
         return;
       }
 
-      // If member had a photo stored in our Supabase bucket, attempt cleanup
-      if (deletingMember.photo_url && deletingMember.photo_url.includes("team-member-photos")) {
-        try {
-          const urlParts = deletingMember.photo_url.split("team-member-photos/");
-          if (urlParts.length > 1) {
-            const storagePath = decodeURIComponent(urlParts[1].split("?")[0]);
-            await supabase.storage.from("team-member-photos").remove([storagePath]);
-          }
-        } catch (cleanupErr) {
-          console.warn("Could not delete photo file from storage:", cleanupErr);
+      // 3. If the team member had an associated photo in storage, delete it
+      let photoDeleteFailed = false;
+      let photoErrorMessage = "";
+
+      if (storagePath) {
+        const deleteResult = await deletePhotoFromStorage(photoUrl, memberId);
+        if (!deleteResult.success) {
+          photoDeleteFailed = true;
+          photoErrorMessage = deleteResult.error?.message || "Storage delete failed";
+          console.error("Photo deletion from Supabase Storage failed:", deleteResult.error);
         }
       }
 
-      // Update state locally
-      setMembers((prev) => prev.filter((m) => m.id !== deletingMember.id));
-      setActionSuccess(`"${deletingMember.name}" has been deleted.`);
+      // 4. Update UI state locally
+      setMembers((prev) => prev.filter((m) => m.id !== memberId));
       setDeletingMember(null);
+
+      // 5. Handle user feedback appropriately rather than silently reporting complete success
+      if (photoDeleteFailed) {
+        setActionError(
+          `"${memberName}" was removed from the database, but their profile photo could not be deleted from Supabase Storage (${photoErrorMessage}).`
+        );
+      } else {
+        setActionSuccess(
+          storagePath
+            ? `"${memberName}" and their associated profile photo have been deleted.`
+            : `"${memberName}" has been deleted.`
+        );
+      }
 
       setTimeout(() => {
         setActionSuccess("");
-      }, 4000);
+      }, 5000);
     } catch (err) {
       console.error("Unexpected delete error:", err);
-      alert("An unexpected error occurred while deleting the team member.");
+      setActionError("An unexpected error occurred while deleting the team member.");
+      setDeletingMember(null);
     } finally {
       setIsDeleting(false);
     }
@@ -330,6 +356,28 @@ function TeamMembersList({ onBack }) {
               type="button"
               onClick={() => setActionSuccess("")}
               className="text-green-600 hover:text-green-800"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
+        {/* Action Error Banner */}
+        {actionError && (
+          <div
+            className="mb-6 flex items-center justify-between rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-sm transition-all"
+            role="alert"
+          >
+            <div className="flex items-center gap-2.5">
+              <svg className="h-5 w-5 flex-shrink-0 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{actionError}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setActionError("")}
+              className="text-red-600 hover:text-red-800"
             >
               ✕
             </button>
