@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "../lib/supabase";
+import { deletePhotoFromStorage } from "../lib/storage";
 
 const initialFormData = {
   name: "",
@@ -278,6 +279,13 @@ function TeamMemberForm({ initialData = null, onSuccess, onCancel, embedded = fa
             "Database permission error: Update was blocked by Supabase Row Level Security (RLS) policies. Please disable RLS or set an UPDATE policy for anonymous/public access in Supabase."
           );
           return;
+        }
+
+        // If the profile photo was updated or removed, delete the old photo from storage
+        if (initialData.photo_url && initialData.photo_url !== photoUrl) {
+          deletePhotoFromStorage(initialData.photo_url, initialData.id).catch((err) => {
+            console.warn("Could not remove superseded photo from storage:", err);
+          });
         }
 
         setSuccessMessage("Team member has been updated successfully.");
